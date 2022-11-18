@@ -10,7 +10,7 @@ public class Print
         Console.ResetColor();
     }
 
-    public static short Menu(string text, string[] options, bool? hasBack)
+    public static int Menu(string text, string[] options, bool? hasBack)
     {
         #region Printing the menu
 
@@ -42,17 +42,17 @@ public class Print
 
         #region Getting an input
 
-        short q;
+        int q;
         while (true)
         {
             q = 1;
             string input = Console.ReadLine().ToLower();
-            short inputS;
-            if (short.TryParse(input, out inputS) &&
+            int inputS;
+            if (int.TryParse(input, out inputS) &&
                 ((inputS > 0 && inputS <= options.Length + 1) || (hasBack != null && inputS == i)))
                 return inputS;
             if ((hasBack == true && input == "back") || (hasBack == false && input == "exit"))
-                return (short)i;
+                return i;
             foreach (string option in options)
             {
                 if (input == option.ToLower())
