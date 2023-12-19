@@ -2,40 +2,24 @@
 
 public class Print
 {
-    public static void Header(string title)
-    {
-        Console.ForegroundColor = ConsoleColor.Cyan;
-        Console.Clear();
-        Console.WriteLine($"{title} Page\n{DateTime.Now.ToString("g")}\n{new string('*', 20)}");
-        Console.ResetColor();
-    }
-
-    public static int Menu(string text, string[] options, bool? hasBack)
+    public static int Menu(string[] options, string text = "What do you want to do?", bool? hasBack = false)
     {
         #region Printing the menu
 
-        Console.Write(text == "d" ? "What do you want to do?" : text);
+        Console.Write(text);
         var i = 1;
         if (options.Length <= 8)
         {
             foreach (var option in options)
                 Console.Write($"{(i == 1 ? " (" : ", ")}{i++}.{option}");
-            if (hasBack == true)
-                Console.WriteLine($", {i}.Back)");
-            else if (hasBack == false)
-                Console.WriteLine($", {i}.Exit)");
-            else
-                Console.WriteLine(")");
+            Console.WriteLine(hasBack is null ? ")" : (bool)hasBack ? $", {i}.Back)" : $", {i}.Exit)");
         }
         else
         {
             Console.WriteLine();
             foreach (var option in options)
                 Console.WriteLine($"{i++}.{option}");
-            if (hasBack == true)
-                Console.WriteLine(i + ".Back");
-            else if (hasBack == false)
-                Console.WriteLine(i + ".Exit");
+            Console.WriteLine((bool)hasBack ? i + ".Back" : i + ".Exit");
         }
 
         #endregion Printing the menu
@@ -67,9 +51,9 @@ public class Print
         #endregion Getting an input
     }
 
-    public static void WDelay(string text, int delay)
+    public static void WDelay(string text, int delay, char separator = '^')
     {
-        var parts = text.Split('^');
+        var parts = text.Split(separator);
         foreach (var part in parts)
         {
             Console.Write(part);
