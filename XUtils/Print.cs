@@ -78,4 +78,10 @@ public class Print
 
         Console.WriteLine();
     }
+
+    public static string Input(string text, bool nl = true)
+    {
+        Console.Write(text + (nl?"\n":""));
+        return Console.ReadLine();
+    }
 }
