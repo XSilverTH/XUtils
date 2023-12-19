@@ -1,6 +1,6 @@
 ﻿namespace XUtils;
 
-public class Print
+public class Xonsole
 {
     public static int Menu(string[] options, string text = "What do you want to do?", bool? hasBack = false)
     {
