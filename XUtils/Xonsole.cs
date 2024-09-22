@@ -2,7 +2,7 @@
 
 public class Xonsole
 {
-    public static int Menu(string[] options, string text = "What do you want to do?", bool? hasBack = false)
+    public static int Menu(string[] options, string text = "What do you want to do?", bool? hasBack = null)
     {
         #region Printing the menu
 
@@ -51,13 +51,13 @@ public class Xonsole
         #endregion Getting an input
     }
 
-    public static void WDelay(string text, int delay, char separator = '^')
+    public static void WriteWithDelay(string text, int delayMilliseconds, char separator = '^')
     {
         var parts = text.Split(separator);
         foreach (var part in parts)
         {
             Console.Write(part);
-            Thread.Sleep(delay);
+            Thread.Sleep(delayMilliseconds);
         }
 
         Console.WriteLine();
