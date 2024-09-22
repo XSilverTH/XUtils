@@ -2,24 +2,25 @@
 
 public class Xonsole
 {
-    public static int Menu(string[] options, string text = "What do you want to do?", bool? hasBack = null)
+
+    public static int Menu(string prompt, string[] options, int delayMilliseconds = 0, char separator = '^',
+        ConsoleColor foregroundColor = ConsoleColor.White, ConsoleColor backgroundColor = ConsoleColor.Black)
     {
         #region Printing the menu
 
-        Console.Write(text);
+        Write(prompt, delayMilliseconds, separator, foregroundColor, backgroundColor);
         var i = 1;
         if (options.Length <= 8)
         {
             foreach (var option in options)
-                Console.Write($"{(i == 1 ? " (" : ", ")}{i++}.{option}");
-            Console.WriteLine(hasBack is null ? ")" : (bool)hasBack ? $", {i}.Back)" : $", {i}.Exit)");
+                Write($"{(i == 1 ? " (" : ", ")}{i++}.{option}", delayMilliseconds, separator, foregroundColor, backgroundColor);
+            Console.WriteLine(")");
         }
         else
         {
             Console.WriteLine();
             foreach (var option in options)
-                Console.WriteLine($"{i++}.{option}");
-            Console.WriteLine((bool)hasBack ? i + ".Back" : i + ".Exit");
+                WriteLine($"{i++}.{option}", delayMilliseconds, separator, foregroundColor, backgroundColor);
         }
 
         #endregion Printing the menu
@@ -33,13 +34,11 @@ public class Xonsole
             var input = Console.ReadLine().ToLower();
             int inputS;
             if (int.TryParse(input, out inputS) &&
-                ((inputS > 0 && inputS <= options.Length + 1) || (hasBack != null && inputS == i)))
+                inputS > 0 && inputS <= options.Length + 1)
                 return inputS;
-            if ((hasBack == true && input == "back") || (hasBack == false && input == "exit"))
-                return i;
             foreach (var option in options)
             {
-                if (input == option.ToLower())
+                if (input == option.Replace("^","").ToLower())
                     return q;
 
                 q++;
@@ -50,22 +49,58 @@ public class Xonsole
 
         #endregion Getting an input
     }
-
-    public static void WriteWithDelay(string text, int delayMilliseconds, char separator = '^')
+    public static string Input(string text, bool nl = true, int delayMilliseconds = 0, char separator = '^',
+        ConsoleColor foregroundColor = ConsoleColor.White, ConsoleColor backgroundColor = ConsoleColor.Black)
     {
+        Write(text + (nl ? "\n" : ""), delayMilliseconds, separator, foregroundColor, backgroundColor);
+        return Console.ReadLine();
+    }
+
+    public static void WriteLine(string text, int delayMilliseconds = 0, char separator = '^',
+        ConsoleColor foregroundColor = ConsoleColor.White, ConsoleColor backgroundColor = ConsoleColor.Black)
+    {
+        var originalForegroundColor = Console.ForegroundColor;
+        var originalBackgroundColor = Console.BackgroundColor;
+
+        Console.ForegroundColor = foregroundColor;
+        Console.BackgroundColor = backgroundColor;
+        
         var parts = text.Split(separator);
         foreach (var part in parts)
         {
             Console.Write(part);
-            Thread.Sleep(delayMilliseconds);
+            if (delayMilliseconds > 0)
+                Thread.Sleep(delayMilliseconds);
         }
 
         Console.WriteLine();
+
+        Console.ForegroundColor = originalForegroundColor;
+        Console.BackgroundColor = originalBackgroundColor;
+    }
+    
+    public static void Write(string text, int delayMilliseconds = 0, char separator = '^',
+        ConsoleColor foregroundColor = ConsoleColor.White, ConsoleColor backgroundColor = ConsoleColor.Black)
+    {
+        var originalForegroundColor = Console.ForegroundColor;
+        var originalBackgroundColor = Console.BackgroundColor;
+
+        Console.ForegroundColor = foregroundColor;
+        Console.BackgroundColor = backgroundColor;
+
+        var parts = text.Split(separator);
+        bool first = true;
+        foreach (var part in parts)
+        {
+            Console.Write(part);
+            if (delayMilliseconds > 0 && !first)
+                Thread.Sleep(delayMilliseconds);
+            first = false;
+        }
+
+        Console.ForegroundColor = originalForegroundColor;
+        Console.BackgroundColor = originalBackgroundColor;
     }
 
-    public static string Input(string text, bool nl = true)
-    {
-        Console.Write(text + (nl ? "\n" : ""));
-        return Console.ReadLine();
-    }
+   
 }

@@ -1,6 +1,4 @@
-﻿using System.Text;
-
-namespace XUtils;
+﻿namespace XUtils;
 
 public class Text
 {
